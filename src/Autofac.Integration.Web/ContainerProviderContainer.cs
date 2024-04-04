@@ -163,7 +163,7 @@ public class ContainerProviderContainer : IContainer
     /// </returns>
     /// <exception cref="ComponentNotRegisteredException"/>
     /// <exception cref="Autofac.Core.DependencyResolutionException"/>
-    public object ResolveComponent(ResolveRequest request)
+    public object ResolveComponent(in ResolveRequest request)
     {
         return _containerProvider.RequestLifetime.ResolveComponent(request);
     }
