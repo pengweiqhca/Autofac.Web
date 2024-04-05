@@ -37,6 +37,8 @@
     <EmbedAllSources>true</EmbedAllSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- OmniSharp/VS Code resource generation -->
+    <CoreCompileDependsOn>PrepareResources;$(CompileDependsOn)</CoreCompileDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -74,16 +76,21 @@
     <AdditionalFiles Include="..\..\build\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
+  <ItemDefinitionGroup>
+    <EmbeddedResource>
+      <Generator>MSBuild:Compile</Generator>
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedFileName>$(IntermediateOutputPath)%(Filename).Designer.cs</StronglyTypedFileName>
+      <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+    </EmbeddedResource>
+  </ItemDefinitionGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="ContainerDisposalModuleResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ContainerDisposalModuleResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+      <StronglyTypedNamespace>Autofac.Integration.Web</StronglyTypedNamespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Forms\DependencyInjectionModuleResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DependencyInjectionModuleResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+      <StronglyTypedNamespace>Autofac.Integration.Web.Forms</StronglyTypedNamespace>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
