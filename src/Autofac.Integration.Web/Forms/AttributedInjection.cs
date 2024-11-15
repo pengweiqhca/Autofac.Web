@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Autofac Project. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Collections.Concurrent;
+
 namespace Autofac.Integration.Web.Forms;
 
 /// <summary>
@@ -10,6 +12,9 @@ namespace Autofac.Integration.Web.Forms;
 /// </summary>
 internal class AttributedInjection : PageInjectionBehavior
 {
+    private static readonly ConcurrentDictionary<Type, bool> HasRequiredMemberAttributeCache =
+        new ConcurrentDictionary<Type, bool>();
+
     /// <summary>
     /// Override to return a closure that injects properties into a target.
     /// </summary>
@@ -33,10 +38,30 @@ internal class AttributedInjection : PageInjectionBehavior
             {
                 return context.InjectUnsetProperties(target);
             }
+            else if (HasRequiredMemberAttribute(targetType))
+            {
+                return context.InjectProperties(target, RequiredPropertySelector.Default);
+            }
             else
             {
                 return target;
             }
         };
+    }
+
+    private static bool HasRequiredMemberAttribute(Type type)
+    {
+        return HasRequiredMemberAttributeCache.GetOrAdd(type, t =>
+        {
+            for (var currentType = t; currentType != null && currentType != typeof(object); currentType = currentType.BaseType)
+            {
+                if (currentType.HasRequiredMemberAttribute())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 }

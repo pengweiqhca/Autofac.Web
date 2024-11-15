@@ -103,6 +103,17 @@ public class ContainerProviderContainer : IContainer
     }
 
     /// <summary>
+    /// Resolve an instance of the provided registration within the context.
+    /// </summary>
+    /// <param name="request">The resolve request.</param>
+    /// <returns>
+    /// The component instance.
+    /// </returns>
+    /// <exception cref="ComponentNotRegisteredException"/>
+    /// <exception cref="DependencyResolutionException"/>
+    public object ResolveComponent(ResolveRequest request) => _containerProvider.RequestLifetime.ResolveComponent(request);
+
+    /// <summary>
     /// Gets the disposer associated with this <see cref="ILifetimeScope"/>.
     /// Component instances can be associated with it manually if required.
     /// </summary>
