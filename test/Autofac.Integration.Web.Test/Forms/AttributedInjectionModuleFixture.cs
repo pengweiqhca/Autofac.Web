@@ -36,10 +36,10 @@ public class AttributedInjectionModuleFixture
         public string Property { get; set; }
     }
 
-        private class RequiredMemberInjectedPage : HttpHandler
-        {
-            public required string Property { get; set; }
-        }
+    private class RequiredMemberInjectedPage : HttpHandler
+    {
+        public required string Property { get; set; }
+    }
 
     private class NonInjectedPage : HttpHandler
     {
@@ -100,20 +100,20 @@ public class AttributedInjectionModuleFixture
         Assert.Equal(ExplicitlyProvidedString, page.Property);
     }
 
-        [Fact]
-        public void RequiredPropertyInjectedValueSet()
+    [Fact]
+    public void RequiredPropertyInjectedValueSet()
+    {
+        var context = CreateContext();
+        var page = new RequiredMemberInjectedPage
         {
-            var context = CreateContext();
-            var page = new RequiredMemberInjectedPage
-            {
-                Property = ExplicitlyProvidedString,
-            };
-            var target = new AttributedInjectionModule();
-            var injector = target.GetInjectionBehavior(page);
-            Assert.NotNull(injector);
-            injector.InjectDependencies(context, page);
-            Assert.Equal(ContextSuppliedString, page.Property);
-        }
+            Property = ExplicitlyProvidedString,
+        };
+        var target = new AttributedInjectionModule();
+        var injector = target.GetInjectionBehavior(page);
+        Assert.NotNull(injector);
+        injector.InjectDependencies(context, page);
+        Assert.Equal(ContextSuppliedString, page.Property);
+    }
 
     [Fact]
     public void PropertyNotInjected()
